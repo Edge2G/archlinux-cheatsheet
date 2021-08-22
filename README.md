@@ -103,3 +103,97 @@ Now, the **pacstrap** scripts installs the base system, and some utilities along
 ```sh
 pacstrap /mnt base base-devel linux linux-headers linux-firmware vim vi
 ```
+
+### 5. FStab and change root
+---
+
+Generate de **fstab** file, so the OS knows what to mount where on startup
+
+```sh
+genfstab -U /mnt >> /mnt/etc/fstab
+```
+
+And change the root to the installed volume
+
+```sh
+arch-chroot /mnt
+```
+
+### 6. Network + bootloader and last touches
+---
+
+Install a network manager and bootloader (**grub** in this case) on the new system
+
+```sh
+pacman -S networkmanager grub os-prober efibootmgr
+```
+
+And enable them (care with case sensitive commands)
+
+```sh
+systemctl enable NetworkManager
+```
+
+```sh
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Archlinux
+```
+
+```sh
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+Give the root user a password
+
+```sh
+passwd
+```
+
+Adjust the hardware clock
+
+```sh
+hwclock --systohc
+```
+
+Generate the locale (uncomment the desired language(s))
+
+```sh
+vim /etc/locale.gen
+```
+
+```sh
+locale-gen
+```
+
+```sh
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+```
+
+Set the virtual console keyboard layout
+
+```sh
+echo "KEYMAP=la-latin1" >> /etc/vconsole.conf
+```
+
+Set the time zone (replace *Region* and *City* with yours)
+
+```sh
+ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
+```
+
+Set the machine host name (replace *hostname* with a name you want or like)
+
+```sh
+echo "hostname" >> /etc/hostname
+```
+
+Now exit the root and unmount all partitions
+
+```sh
+exit
+```
+
+```sh
+umount -R /mnt
+```
+
+And that's it! You can now boot into a freshly installed archlinux :)
