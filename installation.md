@@ -1,4 +1,4 @@
-### 1. Set the keyboard layout
+### 1. Set the keyboard layout and verify UEFI
 ---
 
 ```sh
@@ -10,6 +10,20 @@ This one is for latin american keyboard. To search your particular layout, run
 ```sh
 localectl list-keymaps
 ```
+
+If the font is too small, increase it's size with
+
+```sh
+setfont ter-132n
+```
+
+Then, to check if the system booted under UEFI
+
+```sh
+ls /sys/firmware/efi/efivars
+```
+
+and if the directory exists, it's under UEFI.
 
 ### 2. Connect to the internet
 ---
@@ -27,6 +41,8 @@ device list
 station wlan0 scan (assuming your device is wlan0)
 station wlan0 get-networks
 station wlan0 connect SSID
+*enter password*
+exit
 ```
 
 Where *SSID* is the name of your network. Then ping to test the connection.
@@ -35,10 +51,16 @@ Where *SSID* is the name of your network. Then ping to test the connection.
 ping archlinux.org
 ```
 
-And update the system clock
+Update the system clock
 
 ```sh
 timedatectl set-ntp true
+```
+
+and synchronize packages with Pacman (package manager)
+
+```sh
+pacman -Sy
 ```
 
 ### 3. Disk partitioning and formatting
@@ -58,47 +80,56 @@ Second, run *cfdisk* with the desired device, for example *sda* (more info on bl
 cfdisk /dev/sdx
 ```
 
-Replace *x* with your device letter, *sda, sdb, sdc, etc*
+Replace *x* with your device letter, *sda, sdb, sdc, etc*.
 
-Now, since it's a fresh install, **delete** all partitions. We want to create 2 partitions, 1 for **boot**, and the rest for the **root** partition.<br>
+Also, if you have an NVME drive, they are usually named as *nvme0n1*, etc.
+
+Now, since it's a fresh install, **delete** all partitions. We want to create **AT LEAST** 2 partitions, 1 for **boot**, and the rest for the **root** partition.
+
+A *swap* partition is optional.
+
+If you are asked about the *Label type*, select *GPT*. <br> 
 
 Select
 > **new** -> 300M -> type -> efi system
 >
-> **new** -> Press **enter** for the rest of the device -> type -> linux filesystem
+>**new** -> X ammount -> type -> Linux swap
+>
+> **new** -> Press **enter** for the rest of the device storage -> type -> linux filesystem
 >
 > **write**
-
-**Note:** At this point, you can also create a swap partition.
 
 For formatting, the 300M boot partition has to be a fat32 file system. The root partition, in this case, is **ext4**, but there's also [more options for file systems](https://wiki.archlinux.org/title/File_systems#Types_of_file_systems)
 
 ```sh
-mkfs.fat -F32 /dev/sda1
-mkfs.ext4 /dev/sda2
+mkfs.fat -F32 /dev/sdaX
+mkfs.ext4 /dev/sdaY
+mkswap /dev/sdaZ
+swapon /dev/sdaZ
 ```
+
+**Make sure** you format the correct partition with it's type
 
 ### 4. System installation
 ---
 
-First create **boot** directory for mountpoint, and mount the previously created partitions
+First, mount the **root** partition, and then the **boot** partition (the order is important):
 
 ```sh
-mkdir /mnt/boot
-mount /dev/sda1 /mnt/boot
-mount /dev/sda2 /mnt
+mount /dev/sdaY /mnt
+mount --mkdir /dev/sdaX /mnt/boot
 ```
 
-Now, the **pacstrap** scripts installs the base system, and some utilities along with it
+Now, the **pacstrap** script installs the base system, and some (optional) utilities along with it
 
 ```sh
-pacstrap /mnt base base-devel linux linux-headers linux-firmware vim vi
+pacstrap /mnt base base-devel linux linux-headers linux-firmware vim vi git
 ```
 
 ### 5. FStab and change root
 ---
 
-Generate de **fstab** file, so the OS knows what to mount where on startup
+Generate the **fstab** (File System Table) file, so the OS knows where to mount the partitions on startup
 
 ```sh
 genfstab -U /mnt >> /mnt/etc/fstab
