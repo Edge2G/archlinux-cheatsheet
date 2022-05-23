@@ -23,10 +23,10 @@ useradd -mg wheel USER-NAME
 ```
 
 ```sh
-passwd PASSWORD
+passwd USER-NAME
 ```
 
-This creates the user *USER-NAME* with its password *PASSWORD*.
+This creates the user *USER-NAME* with it's password
 
 The parameters *-mg* are to create a home directory (/home/USER-NAME) and to add said user to the *wheel* group for administration privileges.
 
@@ -92,7 +92,7 @@ pacman -S xf86-video-amdgpu
 All of this requires to reconfigure GRUB and reboot your PC
 
 ```sh
-grub -mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ```sh
