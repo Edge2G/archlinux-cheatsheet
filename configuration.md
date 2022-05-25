@@ -87,6 +87,12 @@ Or AMD
 pacman -S xf86-video-amdgpu
 ```
 
+Or Intel
+
+```sh
+pacman -S xf86-video-intel
+```
+
 \***Important**: It's recommended to consult [here](https://wiki.archlinux.org/title/Xorg#Driver_installation) for your particular set-up\*
 
 All of this requires to reconfigure GRUB and reboot your PC
@@ -100,4 +106,4 @@ reboot
 ```
 ---
 
-Now the system is ready for general use, but it lacks a graphical environment and an audio server, which is discussed in the [media section](media.md).
+Now the system is ready for general use, and you can log in with your own account, but it lacks a graphical environment and an audio server, which is discussed in the [media section](media.md).
