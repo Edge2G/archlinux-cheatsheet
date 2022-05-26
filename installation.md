@@ -220,4 +220,4 @@ umount -R /mnt
 
 And that's it! You can now boot into a freshly installed archlinux :)
 
-In the [next section](configuration.md), you can find the steps to further configure the system.
+In the [next section](administration.md), you can find the steps to administrate the system, and install some needed programs.

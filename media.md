@@ -63,3 +63,9 @@ startx
 ```
 
 If everything went well, a black background with some colored text should appear on the screen, meaning that *i3* has succesfully been executed.
+
+---
+
+With this, you should now have a generally functional, but very minimal OS, with graphical capabilities.
+
+The [next section](configuration.md) offers a list of steps to complete the installation into a more comfortable user experience.

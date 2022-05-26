@@ -11,5 +11,6 @@ It is by no means the best, or most efficient way to do this, but it works for m
 ### Sections
 
 * [Installation](installation.md)
-* [Configuration (post-install)](configuration.md)
+* [Administration (post-install)](administration.md)
 * [Graphics and Audio](media.md).
+* [Configuration](configuration.md)
