@@ -110,6 +110,15 @@ swapon /dev/sdaZ
 
 **Make sure** you format the correct partition with it's type
 
+### Optional: Mirrors
+---
+
+This is a good point to update the mirrorlist pacman uses for faster and more reliable downloads, using *Reflector*
+
+```sh
+reflector --verbose -l 100 -n 20 -p https,http --sort rate --save /etc/pacman.d/mirrorlist
+```
+
 ### 4. System installation
 ---
 
@@ -123,8 +132,10 @@ mount --mkdir /dev/sdaX /mnt/boot
 Now, the **pacstrap** script installs the base system, and some (optional) utilities along with it
 
 ```sh
-pacstrap /mnt base base-devel linux linux-headers linux-firmware vim vi git
+pacstrap -K /mnt base base-devel linux linux-headers linux-firmware vim vi git
 ```
+
+Replace linux and linux-headers with linux-lts and linux-lts-headers if you want lts kernel.
 
 ### 5. FStab and change root
 ---

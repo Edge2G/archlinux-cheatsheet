@@ -78,7 +78,7 @@ You can also install GPU drivers at this point:
 For Nvidia graphic cards
 
 ```sh
-pacman -S nvidia
+pacman -S nvidia nvidia-utils
 ```
 
 Or AMD
@@ -90,7 +90,7 @@ pacman -S xf86-video-amdgpu
 Or Intel
 
 ```sh
-pacman -S xf86-video-intel
+pacman -S xf86-video-intel intel-media-driver
 ```
 
 \***Important**: It's recommended to consult [here](https://wiki.archlinux.org/title/Xorg#Driver_installation) for your particular set-up\*
